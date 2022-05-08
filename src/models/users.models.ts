@@ -58,4 +58,11 @@ UserSchema.post<IUser>("save", function () {
   logging.info("Mongo", "Checkout the user we just saved: ", this);
 });
 
+UserSchema.methods.toJSON = function () {
+  let user = this;
+  let userObject = user.toObject();
+  delete userObject.password;
+  return userObject;
+};
+
 export default model<IUser>("Users", UserSchema);
