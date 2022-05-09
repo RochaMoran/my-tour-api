@@ -18,9 +18,8 @@ const UserSchema: Schema = new Schema(
       default: false,
     },
     verified: {
-      type: Boolean,
+      type: Number,
       required: true,
-      default: false,
     },
   },
   {
@@ -55,7 +54,7 @@ UserSchema.methods.comparepassword = function (password: string, cb: any) {
 };
 
 UserSchema.post<IUser>("save", function () {
-  logging.info("Mongo", "Checkout the user we just saved: ", this);
+  logging.info("Mongo", "Checkout the user we just saved: ");
 });
 
 UserSchema.methods.toJSON = function () {

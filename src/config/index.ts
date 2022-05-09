@@ -2,6 +2,11 @@ import {config as configDotenv} from 'dotenv'
 
 configDotenv()
 
+const MAIL_CREDENTIALS = {
+    name: process.env.MAILNAME,
+    password: process.env.MAILPASSWORD
+}
+
 const MONGO_OPTIONS = {
     maxPoolSize:50,
     wtimeoutMS:2500,
@@ -29,7 +34,8 @@ const SERVER = {
 
 const config = {
     mongo: MONGO,
-    server: SERVER
+    server: SERVER,
+    email: MAIL_CREDENTIALS
 };
 
 export default config;

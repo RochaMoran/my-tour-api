@@ -21,3 +21,23 @@ export const validateRegister = [
             validateResult(req, res, next)
         }
 ]
+
+export const validateVerifiedCode = [
+    check('email')
+        .exists()
+        .notEmpty()
+        .withMessage("Favor, ingrese su correo")
+        .trim()
+        .normalizeEmail()
+        .isEmail()
+        .withMessage("Favor, ingrese un correo valido"),
+    check('code')
+        .exists()
+        .notEmpty()
+        .withMessage("Favor, ingrese su codigo")
+        .matches(/^.{5,6}$/)
+        .withMessage("Su codigo debe tener 5 o 6 digitos"),
+        (req:Request, res:Response, next:NextFunction) => {
+            validateResult(req, res, next)
+        }
+]
