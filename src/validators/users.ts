@@ -22,6 +22,24 @@ export const validateRegister = [
         }
 ]
 
+export const validateLogin = [
+    check('email')
+        .exists()
+        .notEmpty()
+        .withMessage("Favor, ingrese su correo")
+        .trim()
+        .normalizeEmail()
+        .isEmail()
+        .withMessage("Favor, ingrese un correo valido"),
+    check('password')
+        .exists()
+        .notEmpty()
+        .withMessage("Favor, ingrese su contraseña"),
+        (req:Request, res:Response, next:NextFunction) => {
+            validateResult(req, res, next)
+        }
+]
+
 export const validateVerifiedCode = [
     check('email')
         .exists()
