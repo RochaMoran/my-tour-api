@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/users.models";
 import bcryptjs from "bcryptjs";
 import { generateCode, getTemplate, sendEmail } from "../helpers/mail";
+import { generateToken } from "../services/Token";
 
 export const createUser = (req: Request, res: Response): any => {
   if (req.body) {
@@ -57,9 +58,12 @@ export const login = async (req: Request, res: Response) => {
       if (user) {
         if (user.verified === 0) {
           if (bcryptjs.compareSync(req.body.password, user.password)) {
+            let token = generateToken(user, '1m')
+
             return res.json({
               ok: true,
               user,
+              token
             });
           }
 
@@ -103,10 +107,13 @@ export const verifiedAccount = async (req: Request, res: Response) => {
           const result = await user.save();
 
           if (result) {
+            let token = generateToken(user, '1m')
+
             return res.status(202).json({
               ok: true,
               message: "Cuenta verificada exitosamente",
               result,
+              token
             });
           }
           return res.status(400).json({

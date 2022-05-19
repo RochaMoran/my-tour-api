@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { createUser, login, verifiedAccount } from '../../controllers/users.controllers'
-import { validateRegister, validateVerifiedCode } from '../../validators/users'
+import { validateRegister, validateVerifiedCode, validateLogin } from '../../validators/users'
 import { oauthGoogle } from '../../controllers/google.controller'
 
 const router = Router()
@@ -10,7 +10,7 @@ router.get('/', (_req, res) => {
 })
 
 router.post('/register/', validateRegister, createUser)
-router.post('/login/', validateRegister, login)
+router.post('/login/', validateLogin, login)
 router.post('/google/', oauthGoogle)
 router.put('/verified/', validateVerifiedCode, verifiedAccount)
 
