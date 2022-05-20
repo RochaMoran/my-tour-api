@@ -62,6 +62,11 @@ const SiteSchema: Schema = new Schema(
         required: true,
       },
     },
+    created_by: {
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
+      required: true
+    }
   },
   {
     timestamps: true,

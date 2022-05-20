@@ -7,6 +7,12 @@ const MAIL_CREDENTIALS = {
     password: process.env.MAILPASSWORD
 }
 
+const CLOUDINARY_CREDENTIALS = {
+    name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+}
+
 const MONGO_OPTIONS = {
     maxPoolSize:50,
     wtimeoutMS:2500,
@@ -35,7 +41,8 @@ const SERVER = {
 const config = {
     mongo: MONGO,
     server: SERVER,
-    email: MAIL_CREDENTIALS
+    email: MAIL_CREDENTIALS,
+    cloudinary: CLOUDINARY_CREDENTIALS
 };
 
 export default config;
