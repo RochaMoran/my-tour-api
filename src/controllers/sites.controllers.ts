@@ -78,3 +78,49 @@ export const createSite = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getAllSites = async (_req: Request, res: Response) => {
+  try {
+    const sites = await Site.find()
+  
+    if(sites) {
+      return res.json({
+        ok: true,
+        sites
+      })
+    }
+    return res.json({
+      ok: false,
+      msg: "Aún no hay sitios por ver"
+    })
+  } catch(error) {
+    return res.json({
+      ok: false,
+      msg: "Ocurrio un error al traer los sitios",
+      error
+    })
+  }
+}
+
+export const getOneSite = async (req: Request, res: Response) => {
+  try {
+    const site = await Site.findById(req.params.id)
+  
+    if(site) {
+      return res.json({
+        ok: true,
+        site
+      })
+    }
+    return res.json({
+      ok: false,
+      msg: "El sitio que buscaba no se ha encontrado"
+    })
+  } catch(error) {
+    return res.json({
+      ok: false,
+      msg: "Ocurrio un error al traer el sitio",
+      error
+    })
+  }
+}

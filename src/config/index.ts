@@ -7,6 +7,10 @@ const MAIL_CREDENTIALS = {
     password: process.env.MAILPASSWORD
 }
 
+const ACCESS_TOKEN_CONFIG = {
+    secret: process.env.ACCESS_TOKEN_SECRET || 'my-secret'
+}
+
 const CLOUDINARY_CREDENTIALS = {
     name: process.env.CLOUDINARY_NAME,
     api_key: process.env.CLOUDINARY_KEY,
@@ -42,7 +46,8 @@ const config = {
     mongo: MONGO,
     server: SERVER,
     email: MAIL_CREDENTIALS,
-    cloudinary: CLOUDINARY_CREDENTIALS
+    cloudinary: CLOUDINARY_CREDENTIALS,
+    token: ACCESS_TOKEN_CONFIG
 };
 
 export default config;

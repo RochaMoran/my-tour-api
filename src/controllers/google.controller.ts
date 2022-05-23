@@ -40,7 +40,7 @@ export const oauthGoogle = async (req:Request, res:Response) => {
     const findUser = await User.findOne({ email: googleUser });
 
     if (findUser) {
-      let token = generateToken(findUser, "5m");
+      let token = generateToken(findUser);
 
       return res.status(201).json({
         ok: true,
