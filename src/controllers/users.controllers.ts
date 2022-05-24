@@ -23,30 +23,30 @@ export const createUser = (req: Request, res: Response): any => {
         .then((_result) => {
           sendEmail(user.email, "Confirmacion de cuenta", template);
 
-          return res.status(201).json({
+          return res.json({
             ok: true,
             user,
-          });
+          }).status(201);
         })
         .catch((error) => {
-          return res.status(500).json({
+          return res.json({
             ok: false,
             message: error.message,
             error,
-          });
+          }).status(500);
         });
     } catch (error) {
-      return res.status(500).json({
+      return res.json({
         ok: false,
         message: error,
         error,
-      });
+      }).status(500);
     }
   } else {
-    return res.status(500).json({
+    return res.json({
       ok: false,
       message: "Favor, complete todos los campos",
-    });
+    }).status(500);
   }
 };
 
@@ -58,7 +58,7 @@ export const login = async (req: Request, res: Response) => {
       if (user) {
         if (user.verified === 0) {
           if (bcryptjs.compareSync(req.body.password, user.password)) {
-            let token = generateToken(user, '1m')
+            let token = generateToken(user)
 
             return res.json({
               ok: true,
@@ -82,16 +82,16 @@ export const login = async (req: Request, res: Response) => {
         msg: "El usuario no existe",
       });
     } catch (error) {
-      return res.status(500).json({
+      return res.json({
         ok: false,
         message: error,
-      });
+      }).status(500);
     }
   } else {
-    return res.status(500).json({
+    return res.json({
       ok: false,
       message: "Favor, complete todos los campos",
-    });
+    }).status(500);
   }
 };
 
@@ -107,24 +107,24 @@ export const verifiedAccount = async (req: Request, res: Response) => {
           const result = await user.save();
 
           if (result) {
-            let token = generateToken(user, '1m')
+            let token = generateToken(user)
 
-            return res.status(202).json({
+            return res.json({
               ok: true,
-              message: "Cuenta verificada exitosamente",
+              msg: "Cuenta verificada exitosamente",
               result,
               token
-            });
+            }).status(202);
           }
-          return res.status(400).json({
+          return res.json({
             ok: false,
-            message: "Ha ocurrido un error al verificar el codigo",
-          });
+            msg: "Ha ocurrido un error al verificar el codigo",
+          }).status(400);
         } else {
-          return res.status(402).json({
+          return res.json({
             ok: false,
-            message: "Codigo de verificacion incorrecto",
-          });
+            msg: "Codigo de verificacion incorrecto",
+          }).status(402);
         }
       } else {
         return res.json({
@@ -133,15 +133,15 @@ export const verifiedAccount = async (req: Request, res: Response) => {
         });
       }
     } catch (error) {
-      return res.status(500).json({
+      return res.json({
         ok: false,
-        message: error,
-      });
+        msg: error,
+      }).status(500);
     }
   } else {
-    return res.status(402).json({
+    return res.json({
       ok: false,
-      message: "Favor, complete todos los campos",
-    });
+      msg: "Favor, complete todos los campos",
+    }).status(402);
   }
 };
