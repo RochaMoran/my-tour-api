@@ -112,7 +112,7 @@ export const verifiedAccount = async (req: Request, res: Response) => {
             return res.json({
               ok: true,
               msg: "Cuenta verificada exitosamente",
-              result,
+              user,
               token
             }).status(202);
           }
