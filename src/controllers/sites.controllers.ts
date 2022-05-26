@@ -124,3 +124,26 @@ export const getOneSite = async (req: Request, res: Response) => {
     })
   }
 }
+
+export const getSitesByUser = async (_req: Request, res: Response) => {
+  try {
+    const sites = await Site.find({created_by: _req.params.user})
+  
+    if(sites) {
+      return res.json({
+        ok: true,
+        sites
+      })
+    }
+    return res.json({
+      ok: false,
+      msg: "Aún no hay vinculados con este usuario"
+    })
+  } catch(error) {
+    return res.json({
+      ok: false,
+      msg: "Ocurrio un error al traer los sitios",
+      error
+    })
+  }
+}
