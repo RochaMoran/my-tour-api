@@ -8,8 +8,7 @@ let salt:number = parseInt(bcrypjs.genSaltSync(10));
 const UserSchema: Schema = new Schema(
   {
     email: {
-      type: String,
-      unique: true,
+      type: String
     },
     password: String,
     google: {
