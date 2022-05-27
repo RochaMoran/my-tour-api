@@ -1,22 +1,30 @@
 import { check } from 'express-validator'
 import { Request, Response, NextFunction } from "express";
 import { validateResult } from '../helpers/validateHelper';
+import User from '../models/users.models';
+
 
 export const validateRegister = [
     check('email')
-        .exists()
+        .custom(async (email) => {
+            let existUser = await User.findOne({ email })
+                    
+            if(existUser) {
+                throw new Error('Este correo ya esta en uso')
+            }
+        })
         .notEmpty()
         .withMessage("Favor, ingrese su correo")
         .trim()
         .normalizeEmail()
         .isEmail()
         .withMessage("Favor, ingrese un correo valido"),
-    check('password')
+        check('password')
         .exists()
         .notEmpty()
         .withMessage("Favor, ingrese su contraseña")
         .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*.])[a-zA-Z0-9!@#$%^&*.]{6,16}$/)
-        .withMessage("Ingrese una contraseña segura"),
+        .withMessage("Ingrese una contraseña segura que contenga almenos 6 digitos, un caracter especial y un numero"),
         (req:Request, res:Response, next:NextFunction) => {
             validateResult(req, res, next)
         }
