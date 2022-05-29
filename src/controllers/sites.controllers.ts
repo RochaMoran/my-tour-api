@@ -147,3 +147,29 @@ export const getSitesByUser = async (_req: Request, res: Response) => {
     })
   }
 }
+
+export const searchSite = (req:Request, res:Response) => {
+  const name = req.params.name;
+
+  Site.find({ name: { $regex: name } }, (error:any, site:any) => {
+    if (site.length > 0 && !error) {
+      return res.json({
+        ok: true,
+        site
+      });
+    }
+
+    if (error) {
+      return res.json({
+        ok: false,
+        msg: "Ha ocurrido un error al realizar la busqueda",
+        error
+      });
+    }
+
+    return res.json({
+      ok: false,
+      msg: "El sitio que buscas no existe",
+    });
+  });
+};
