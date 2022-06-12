@@ -6,7 +6,7 @@ import { createSiteValidate } from '../../validators/sites'
 
 const router = Router()
 
-router.get('/', getAllSites)
+router.get('/all/:page*?', getAllSites)
 
 router.get('/:id', getOneSite)
 

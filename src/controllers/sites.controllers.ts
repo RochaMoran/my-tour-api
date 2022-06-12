@@ -32,6 +32,7 @@ export const createSite = async (req: Request, res: Response) => {
             latitudeDelta: req.body.latitudeDelta,
             longitudeDelta: req.body.longitudeDelta,
           },
+          tags: req.body.tags
         });
 
         site
@@ -79,9 +80,19 @@ export const createSite = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllSites = async (_req: Request, res: Response) => {
+
+
+export const getAllSites = async (req: Request, res: Response) => {
   try {
-    const sites = await Site.find();
+    const options = {
+      query: {},
+      limit: 2,
+      page: req.params.page || 1
+    };
+
+    const sites = await Site.paginate(options);
+
+    return res.json(sites)
 
     if (sites) {
       return res.json({
