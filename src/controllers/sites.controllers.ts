@@ -32,6 +32,7 @@ export const createSite = async (req: Request, res: Response) => {
             latitudeDelta: req.body.latitudeDelta,
             longitudeDelta: req.body.longitudeDelta,
           },
+          tags: req.body.tags
         });
 
         site
@@ -79,9 +80,17 @@ export const createSite = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllSites = async (_req: Request, res: Response) => {
+
+
+export const getAllSites = async (req: Request, res: Response) => {
   try {
-    const sites = await Site.find();
+    const options = {
+      query: {},
+      limit: 2,
+      page: req.params.page || 1
+    };
+
+    const sites = await Site.paginate(options);
 
     if (sites) {
       return res.json({
@@ -128,6 +137,29 @@ export const getOneSite = async (req: Request, res: Response) => {
 export const getSitesByUser = async (_req: Request, res: Response) => {
   try {
     const sites = await Site.find({ created_by: _req.params.user });
+
+    if (sites) {
+      return res.json({
+        ok: true,
+        sites,
+      });
+    }
+    return res.json({
+      ok: false,
+      msg: "Aún no hay vinculados con este usuario",
+    });
+  } catch (error) {
+    return res.json({
+      ok: false,
+      msg: "Ocurrio un error al traer los sitios",
+      error,
+    });
+  }
+};
+
+export const getSiteByTag = async (_req: Request, res: Response) => {
+  try {
+    const sites = await Site.find({ tags: _req.params.tag });
 
     if (sites) {
       return res.json({
@@ -202,7 +234,6 @@ export const deleteSite = async (req: Request, res: Response) => {
 };
 
 export const updateSite = async (req: Request, res: Response) => {
-  // console.log(req.body, req.params)
   if (req.params.id) {
     try {
       let img = null;
@@ -237,6 +268,7 @@ export const updateSite = async (req: Request, res: Response) => {
               latitudeDelta: req.body.latitudeDelta,
               longitudeDelta: req.body.longitudeDelta,
             },
+            tags: req.body.tags
           },
           (error, site) => {
             if (site) {
