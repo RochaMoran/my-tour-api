@@ -6,6 +6,7 @@ export default interface ISite extends Document {
     imgUrl: any,
     country: string,
     tags: [],
+    rate: number,
     covidMeasures: {
         vaccineCovid: boolean,
         faceMask: boolean,

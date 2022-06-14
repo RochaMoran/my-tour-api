@@ -4,5 +4,6 @@ export default interface IUser extends Document {
     email: string,
     password: string,
     google: boolean,
-    verified: number
+    verified: number,
+    favorites: []
 }

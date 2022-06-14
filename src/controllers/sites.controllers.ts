@@ -272,22 +272,22 @@ export const updateSite = async (req: Request, res: Response) => {
           },
           (error, site) => {
             if (site) {
-              return res.status(201).json({
+              return res.json({
                 ok: true,
                 site,
-              });
+              }).status(201);
             } else if (error) {
-              return res.status(500).json({
+              return res.json({
                 ok: false,
                 msg: error?.message,
                 error,
-              });
+              }).status(500);
             } else {
-              return res.status(500).json({
+              return res.json({
                 ok: false,
                 msg: "Ocurrio un error al actualizar el sitio",
                 error,
-              });
+              }).status(500);
             }
           }
           );
@@ -295,19 +295,19 @@ export const updateSite = async (req: Request, res: Response) => {
       } else {
         req.file?.path && fs.unlinkSync(req.file?.path);
   
-        return res.status(500).json({
+        return res.json({
           ok: false,
           message: "Ha ocurrido un error al subir la imagen",
-        });
+        }).status(500);
       }
     } catch (error) {
       req.file?.path && fs.unlinkSync(req.file?.path);
 
-      return res.status(500).json({
+      return res.json({
         ok: false,
         message: error,
         error,
-      });
+      }).status(500);
     }
   } else {
     return res.json({
