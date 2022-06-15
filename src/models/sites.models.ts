@@ -70,6 +70,10 @@ const SiteSchema: Schema = new Schema(
     },
     tags: {
       type: Array
+    },
+    rate: {
+      type: Number,
+      default: 0
     }
   },
   {
