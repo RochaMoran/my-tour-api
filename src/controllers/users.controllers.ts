@@ -51,6 +51,30 @@ export const createUser = (req: Request, res: Response): any => {
   }
 };
 
+export const getOneUser = async (req:Request, res: Response) => {
+  try {
+    const user = await User.findById(req.params.id)
+
+    if(user) {
+      return res.json({
+        ok: true,
+        msg: "Usuario encontrado exitosamente",
+        user
+      })
+    }
+
+    return res.json({
+      ok: false,
+      msg: "El usuario no existe"
+    })
+  } catch(e) {
+    return res.json({
+      ok: false,
+      msg: e,
+    }).status(500);
+  }
+}
+
 export const login = async (req: Request, res: Response) => {
   if (req.body) {
     try {
@@ -156,7 +180,7 @@ export const addSiteToFavorite = async (req: Request, res: Response) => {
           { _id: siteSearch._id },
           { ...siteSearch, rate: siteSearch.rate++ },
           async (error, site) => {
-            const user = await User.updateOne(
+            await User.updateOne(
               { _id: req.params.id },
               { $addToSet: { favorites: req.body.site } }
             );
@@ -165,7 +189,6 @@ export const addSiteToFavorite = async (req: Request, res: Response) => {
               return res.json({
                 ok: true,
                 msg: "Sitio añadido a favoritos",
-                user,
               });
             } else if (error) {
               return res.status(500).json({
@@ -202,47 +225,40 @@ export const addSiteToFavorite = async (req: Request, res: Response) => {
 
 export const deleteSiteToFavorite = async (req: Request, res: Response) => {
   try {
-    const siteSearch = await Site.findById(req.body.site);
-
-    if(siteSearch) {
-      Site.findByIdAndUpdate(
-        { _id: siteSearch._id },
-        { ...siteSearch, rate: siteSearch.rate-- },
-        async (error, site) => {
-          if(site && !error) {
-            const user = await User.updateOne(
+    const siteSearch = await Site.findById(req.params.site);
+    
+    if (siteSearch) {
+        Site.findByIdAndUpdate(
+          { _id: siteSearch._id },
+          { ...siteSearch, rate: siteSearch.rate-- },
+          async (error, site) => {
+            await User.updateOne(
               { _id: req.params.id },
-              { $pull: { favorites: req.body.site } }
+              { $pull: { favorites: req.params.site } }
             );
-        
-            if (user) {
+
+            if (site && !error) {
               return res.json({
                 ok: true,
-                msg: "Sitio eliminado de favoritos",
-                user,
+                msg: "Sitio removido de favoritos",
+              });
+            } else {
+              return res.status(500).json({
+                ok: false,
+                msg: "Ocurrio un error al eliminar el sitio de favs",
+                error,
               });
             }
-            return res.json({
-              ok: false,
-              msg: "Ha ocurrido un error al eliminar el sitio de favoritos",
-              user,
-            });
-          } else {
-            return res.json({
-              ok: false,
-              msg: "Ha ocurrido un error al eliminar el sitio de favoritos",
-            });
           }
-        }
-      );
-    } else {
-      return res.json({
-        ok: false,
-        msg: "Ha ocurrido un error al eliminar el sitio de favoritos"
-      });
-    }
-    return
-    
+        );
+      } else {
+        return res.json({
+          ok: false,
+          msg: "El sitio que intentas eliminar de favoritos no existe",
+        });
+      }
+
+      return
   } catch (e) {
     return res
       .json({
