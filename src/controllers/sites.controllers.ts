@@ -86,7 +86,7 @@ export const getAllSites = async (req: Request, res: Response) => {
   try {
     const options = {
       query: {},
-      limit: 2,
+      limit: 3,
       page: req.params.page || 1
     };
 
