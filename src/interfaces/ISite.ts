@@ -5,6 +5,8 @@ export default interface ISite extends Document {
     description: string,
     imgUrl: any,
     country: string,
+    tags: [],
+    rate: number,
     covidMeasures: {
         vaccineCovid: boolean,
         faceMask: boolean,
@@ -19,5 +21,5 @@ export default interface ISite extends Document {
         longitude: number,
         latitudeDelta: number,
         longitudeDelta: number
-    }
+    },
 }

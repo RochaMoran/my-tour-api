@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import logging from "../config/logging";
 import ISite from "../interfaces/ISite";
+import { mongoosePagination, Pagination } from 'mongoose-paginate-ts';
 
 const SiteSchema: Schema = new Schema(
   {
@@ -62,6 +63,18 @@ const SiteSchema: Schema = new Schema(
         required: true,
       },
     },
+    created_by: {
+      type: Schema.Types.ObjectId,
+      ref: 'Users',
+      required: true
+    },
+    tags: {
+      type: Array
+    },
+    rate: {
+      type: Number,
+      default: 0
+    }
   },
   {
     timestamps: true,
@@ -72,4 +85,8 @@ SiteSchema.post<ISite>('save', function () {
     logging.info('Mongo', 'Checkout the site we just saved: ', this);
 });
 
-export default model<ISite>('Sites', SiteSchema)
+SiteSchema.plugin(mongoosePagination)
+
+const Site: Pagination<ISite> = model<ISite, Pagination<ISite>>('Sites', SiteSchema);
+
+export default Site
