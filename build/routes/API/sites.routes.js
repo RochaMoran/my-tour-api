@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const sites_controllers_1 = require("../../controllers/sites.controllers");
+const auth_token_1 = require("../../middleware/auth.token");
+const upload_image_1 = require("../../middleware/upload.image");
+const sites_1 = require("../../validators/sites");
+const router = (0, express_1.Router)();
+router.get('/all/:page*?', sites_controllers_1.getAllSites);
+router.get('/:id', sites_controllers_1.getOneSite);
+router.get('/tags/:tag', sites_controllers_1.getSiteByTag);
+router.get('/user/:user', sites_controllers_1.getSitesByUser);
+router.get('/search/:name', sites_controllers_1.searchSite);
+router.delete('/delete/:id', sites_controllers_1.deleteSite);
+router.put('/update/:id', [auth_token_1.authenticateToken, upload_image_1.upload.single('image'), ...sites_1.createSiteValidate], sites_controllers_1.updateSite);
+router.post('/create/', [auth_token_1.authenticateToken, upload_image_1.upload.single('image'), ...sites_1.createSiteValidate], sites_controllers_1.createSite);
+exports.default = router;
