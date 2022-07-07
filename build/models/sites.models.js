@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const logging_1 = __importDefault(require("../config/logging"));
+const mongoose_paginate_ts_1 = require("mongoose-paginate-ts");
 const SiteSchema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -64,10 +65,24 @@ const SiteSchema = new mongoose_1.Schema({
             required: true,
         },
     },
+    created_by: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true
+    },
+    tags: {
+        type: Array
+    },
+    rate: {
+        type: Number,
+        default: 0
+    }
 }, {
     timestamps: true,
 });
 SiteSchema.post('save', function () {
     logging_1.default.info('Mongo', 'Checkout the site we just saved: ', this);
 });
-exports.default = (0, mongoose_1.model)('Sites', SiteSchema);
+SiteSchema.plugin(mongoose_paginate_ts_1.mongoosePagination);
+const Site = (0, mongoose_1.model)('Sites', SiteSchema);
+exports.default = Site;

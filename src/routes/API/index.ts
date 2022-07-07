@@ -4,9 +4,6 @@ import sitesRoutes from "./sites.routes";
 
 const app = express();
 
-app.use("/", (_req, res) => {
-  res.send("Hello World!");
-});
 app.use("/users", usersRoutes);
 app.use("/sites", sitesRoutes);
 
